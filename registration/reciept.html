@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Your Registration Receipt</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 40px;
+    }
+    .receipt {
+      border: 1px solid #ccc;
+      padding: 20px;
+      max-width: 500px;
+    }
+    h2 {
+      color: #00FFFF;
+    }
+    ul {
+      list-style: none;
+      padding-left: 0;
+    }
+    .total {
+      font-weight: bold;
+      margin-top: 10px;
+    }
+    .note {
+      margin-top: 20px;
+      color: #00FFFF;
+    }
+  </style>
+</head>
+<body>
+
+<div class="receipt">
+  <h2>Registration Receipt</h2>
+  <p><strong>Name:</strong> <span id="name"></span></p>
+  <p><strong>Email:</strong> <span id="email"></span></p>
+  Bring this to the convention and show it at registration.</p>
+</div>
+
+<script>
+  const formData = JSON.parse(localStorage.getItem('receiptData'));
+
+  const prices = {
+    "Friday": 15,
+    "Saturday": 15,
+    "Sunday": 10,
+    "Anniversary": 30,
+    "Weekend": 20
+  };
+
+  document.getElementById("name").textContent = `${formData.firstName} ${formData.lastName}`;
+  document.getElementById("email").textContent = formData.email;
+  document.getElementById("phone").textContent = formData.phone;
+
+  const ticketList = document.getElementById("ticket-list");
+  let total = 0;
+  formData.tickets.forEach(ticket => {
+    const li = document.createElement("li");
+    li.textContent = `${ticket} - $${prices[ticket]}`;
+    ticketList.appendChild(li);
+    total += prices[ticket];
+  });
+
+  document.getElementById("total").textContent = total;
+</script>
+
+</body>
+</html>
+

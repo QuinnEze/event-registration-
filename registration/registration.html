@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Event Registration</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0px;
+        }
+        form {
+            max-width: 400px;
+        }
+        label {
+            display: block;
+            margin-top: 1px;
+        }
+        .checkbox-group {
+            margin-top: 10px;
+        }
+        .checkbox-group label {
+            display: inline-block;
+            margin-right: 10px;
+        }
+        .submit-btn {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+<h2>Event Registration</h2>
+
+<form id="registrationForm">
+  <input type="text" name="firstName" placeholder="First Name" required><br>
+  <input type="text" name="lastName" placeholder="Last Name" required><br>
+  <input type="email" name="email" placeholder="Email" required><br>
+  <input type="tel" name="phone" placeholder="Phone" required><br>
+
+  <label>Select up to 2 tickets:</label><br>
+  <input type="checkbox" name="tickets" value="Friday"> Friday<br>
+  <input type="checkbox" name="tickets" value="Saturday"> Saturday<br>
+  <input type="checkbox" name="tickets" value="Sunday"> Sunday<br>
+  <input type="checkbox" name="tickets" value="Weekend"> Weekend<br>
+  <input type="checkbox" name="tickets" value="Anniversary"> Anniversary<br>
+
+  <button type="submit">Submit</button>
+</form>
+
+<script>
+  const form = document.getElementById('registrationForm');
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const formData = new FormData(form);
+    const tickets = formData.getAll('tickets');
+    if (tickets.length === 0 || tickets.length > 2) {
+      alert("Please select 1 or 2 tickets.");
+      return;
+    }
+
+    const data = {
+      firstName: formData.get('firstName'),
+      lastName: formData.get('lastName'),
+      email: formData.get('email'),
+      phone: formData.get('phone'),
+      tickets: tickets
+    };
+
+    // Save to localStorage for receipt
+    localStorage.setItem('receiptData', JSON.stringify(data));
+
+    // Send to Google Apps Script
+    await fetch(https://script.google.com/macros/s/AKfycbztkwtQwnHnzGcirSY2yFb60V8_Y3h8W6K9pTgE_6_0_x4obq38YnyB1yH7jswItTrI/exec, {
+      method: 'POST',
+      body: JSON.stringify(data),
+      headers: { 'Content-Type': 'application/json' }
+    });
+
+    // Redirect to receipt page
+    window.location.href = 'receipt.html';
+  });
+</script>
+
+</body>
+</html>
